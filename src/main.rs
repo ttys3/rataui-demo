@@ -19,6 +19,6 @@ fn main() -> anyhow::Result<()> {
     let mut terminal = start_terminal(io::stdout())?;
 
     list::run_loop(&mut terminal)?;
-    
+
     Ok(())
 }

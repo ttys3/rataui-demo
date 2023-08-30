@@ -91,8 +91,8 @@ pub fn run_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result
 
         // Prepare UI layout
         let chunks = Layout::default()
-            .direction(Direction::Horizontal)
-            .constraints([Constraint::Percentage(30), Constraint::Percentage(70)].as_ref())
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Length(8), Constraint::Min(8), Constraint::Max(3)].as_ref())
             .split(terminal.size()?);
 
         // Prepare conversation list widget
@@ -105,6 +105,9 @@ pub fn run_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result
         let conversations_list = List::new(conversation_items)
             .block(Block::default().title("Conversations").borders(Borders::ALL));
 
+
+        let bottom_cmdbar = Paragraph::new("History    |     Config    |     History    |     New    |     Shared")
+            .block(Block::default().title("Cmd: ").borders(Borders::ALL));
 
         // Render UI
         terminal.draw(|f| {
@@ -124,6 +127,8 @@ pub fn run_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result
 
             f.render_widget(conversations_list, chunks[0]);
             f.render_widget(conversation_details, chunks[1]);
+            f.render_widget(bottom_cmdbar, chunks[2]);
+
             f.render_stateful_widget(
                 Scrollbar::default()
                     .orientation(ScrollbarOrientation::VerticalRight)
